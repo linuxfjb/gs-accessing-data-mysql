@@ -1,0 +1,17 @@
+Dockerfile - after building the jar file, run this to create a lightweight a docker file image
+             to run the jar file.
+Dockerfile.maven - another way to *build and run* the application using maven image from within docker
+mvnw - wrapper that can be used if maven is not installed
+gradlew - wrapper that can be used if gradle is not installed
+target - where the jar file will be built and docker will reference for running applicaton
+docker-compose.yml - spins up a MySQL server on localhost port 3306
+docker-compose_container.yml - spins up a MySQL server to run on a docker container:
+  Note that the network name also includes directory name: complete_mynetwork
+pom.xml - libraries used to build spring boot and spring test application
+src - directory where java source, test source and application set up (connect to db) is stored
+conf.d - currently not used
+settings.gradle - project name is set here if running gradle
+build.gradle - build set up and dependencies if running gradle. (Note that this is not set up. Use maven.)
+
+Note:
+mydata directory - (not present) where mysql will store data

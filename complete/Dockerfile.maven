@@ -1,0 +1,14 @@
+#could use this instead if want to run maven build from within docker file
+FROM maven:3.5.2-jdk-8
+
+RUN mkdir -p /app
+COPY . /app
+WORKDIR /app
+
+#CMD ./mvnw -DskipTests=true package
+#CMD ./mvnw test
+CMD mvn -DskipTests=true package
+CMD mvn test
+
+#can run the jar file directly after being built or do this full build, test, run
+CMD mvn spring-boot:run
