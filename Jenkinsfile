@@ -7,7 +7,7 @@ node {
 	}
 
 	dir("${env.WORKSPACE}/complete") {
-		sh ("./mvnw -DskipTests=true package");
+		sh ("./mvnw -DskipTests=true clean package");
 	}
 
 	stage('Build image') {
