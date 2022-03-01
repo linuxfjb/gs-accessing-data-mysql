@@ -6,9 +6,8 @@ node {
 		checkout scm
 	}
 
-	sh ("pwd")
-
 	sh ("cd complete")
+	sh ("pwd")
 	
 	sh ("./mvnw -DskipTests=true package");
 
