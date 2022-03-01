@@ -6,6 +6,8 @@ node {
 		checkout scm
 	}
 
+	sh ("cd complete")
+
 	stage('Build image') {
 		app = docker.build("${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
 	}
@@ -18,7 +20,6 @@ node {
 	}
 
 	stage('Test') {
-		sh ("cd complete")
 		sh ("docker-compose -f docker-compose.yml up -d")
 		sh ("./mvnw test")
 	}
