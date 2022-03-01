@@ -6,12 +6,11 @@ node {
 		checkout scm
 	}
 
-	dir("${env.WORKSPACE}/complete") {
-		sh ("./mvnw -DskipTests=true clean package");
-	}
-
 	stage('Build image') {
-		app = docker.build("${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
+		dir("${env.WORKSPACE}/complete") {
+			sh ("./mvnw -DskipTests=true clean package");
+			app = docker.build("${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
+		}
 	}
 
 	stage('Push image') {
@@ -21,15 +20,18 @@ node {
 		}
 	}
 
-	stage('Test') {
-		sh ("docker-compose -f docker-compose.yml up -d")
-		sh ("./mvnw test")
+	stage('Integration Test') {
+		dir("${env.WORKSPACE}/complete") {
+			sh ("docker-compose -f docker-compose.yml up -d")
+			sh ("./mvnw test")
+		}
 	}
 
-	stage('Deploy') {
-		sh ("docker-compose -f docker-compose_container.yml up -d")
-		sh ("docker run --network complete_mynetwork -p 8080:8080 -e spring.datasource.url=\"jdbc:mysql://db:3306/db_example\" -d ${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
-
+	stage('Deploy MySQL and Spring Boot services in Docker Container') {
+		dir("${env.WORKSPACE}/complete") {
+			sh ("docker-compose -f docker-compose_container.yml up -d")
+			sh ("docker run --network complete_mynetwork -p 8080:8080 -e spring.datasource.url=\"jdbc:mysql://db:3306/db_example\" -d ${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
+		}
 	}
 
 	stage('Remove old images') {
