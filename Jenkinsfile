@@ -9,6 +9,8 @@ node {
 	sh ("pwd")
 
 	sh ("cd complete")
+	
+	sh ("./mvnw -DskipTests=true package");
 
 	stage('Build image') {
 		app = docker.build("${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
