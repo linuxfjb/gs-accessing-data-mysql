@@ -6,6 +6,8 @@ node {
 		checkout scm
 	}
 
+	sh ("pwd")
+
 	sh ("cd complete")
 
 	stage('Build image') {
