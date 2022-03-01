@@ -1,44 +1,38 @@
-pipeline {
-	agent none
+node {
+	def application = "gs-accessing-data-mysql"
+	def dockerhubaccountid = "linuxfjb"
 
-	triggers {
-		pollSCM 'H/10 * * * *'
+	stage('Clone repository') {
+		checkout scm
 	}
 
-	options {
-		disableConcurrentBuilds()
-		buildDiscarder(logRotator(numToKeepStr: '14'))
+	stage('Build image') {
+		app = docker.build("${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
 	}
 
-	stages {
-		stage("test: baseline (jdk8)") {
-			agent {
-				docker {
-					image 'adoptopenjdk/openjdk8:latest'
-					args '-v $HOME/.m2:/tmp/jenkins-home/.m2'
-				}
-			}
-			options { timeout(time: 30, unit: 'MINUTES') }
-			steps {
-				sh 'test/run.sh'
-			}
+	stage('Push image') {
+		withDockerRegistry([ credentialsId: "docker_login", url: "" ]) {
+			app.push()
+			app.push("latest")
 		}
+	}
+
+	stage('Test') {
+		sh ("cd complete")
+		sh ("docker-compose -f docker-compose.yml up -d")
+		sh ("./mvnw test")
+	}
+
+	stage('Deploy') {
+		sh ("docker-compose -f docker-compose_container.yml up -d")
+		sh ("docker run --network complete_mynetwork -p 8080:8080 -e spring.datasource.url="jdbc:mysql://db:3306/db_example" -d ${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
 
 	}
 
-	post {
-		changed {
-			script {
-				slackSend(
-						color: (currentBuild.currentResult == 'SUCCESS') ? 'good' : 'danger',
-						channel: '#sagan-content',
-						message: "${currentBuild.fullDisplayName} - `${currentBuild.currentResult}`\n${env.BUILD_URL}")
-				emailext(
-						subject: "[${currentBuild.fullDisplayName}] ${currentBuild.currentResult}",
-						mimeType: 'text/html',
-						recipientProviders: [[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']],
-						body: "<a href=\"${env.BUILD_URL}\">${currentBuild.fullDisplayName} is reported as ${currentBuild.currentResult}</a>")
-			}
-		}
+	stage('Remove old images') {
+		// remove docker pld images
+		// sh("docker rmi ${dockerhubaccountid}/${application}:latest -f")
+		sh ("docker image prune -f")
+		sh ("docker container prune -f")
 	}
 }
