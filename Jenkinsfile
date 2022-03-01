@@ -6,10 +6,9 @@ node {
 		checkout scm
 	}
 
-	sh ("cd complete")
-	sh ("pwd")
-	
-	sh ("./mvnw -DskipTests=true package");
+	dir("${env.WORKSPACE}/complete") {
+		sh ("./mvnw -DskipTests=true package");
+	}
 
 	stage('Build image') {
 		app = docker.build("${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
