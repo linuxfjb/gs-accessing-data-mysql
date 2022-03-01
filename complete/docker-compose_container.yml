@@ -16,7 +16,7 @@ services:
       - MYSQL_ROOT_PASSWORD=centos
     volumes:
       - "./conf.d:/etc/mysql/conf.d:ro"
-      - "./mydata:/var/lib/mysql"
+      - "/var/lib/mydata:/var/lib/mysql"
     networks: 
       - mynetwork
 
