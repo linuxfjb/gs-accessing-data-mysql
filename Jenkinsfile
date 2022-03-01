@@ -8,7 +8,6 @@ node {
 
 	stage('Build image') {
 		dir("${env.WORKSPACE}/complete") {
-			sh ("cp -r /var/lib/mydata ./")
 			sh ("./mvnw -DskipTests=true clean package")
 			app = docker.build("${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
 		}
