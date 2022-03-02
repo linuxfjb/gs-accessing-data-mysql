@@ -30,7 +30,7 @@ node {
 	stage('Deploy MySQL and Spring Boot services in Docker Container') {
 		dir("${env.WORKSPACE}/complete") {
 			sh ("docker-compose -f docker-compose_container.yml up -d")
-			sh ("docker run --network complete_mynetwork -p 8081:8080 --expose 8081 -e spring.datasource.url=\"jdbc:mysql://db:3306/db_example\" -d ${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
+			sh ("docker run --network complete_mynetwork -p 8081:8081 --expose 8081 -e spring.datasource.url=\"jdbc:mysql://db:3306/db_example\" -d ${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
 		}
 	}
 
