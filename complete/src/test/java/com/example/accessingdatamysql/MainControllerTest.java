@@ -132,6 +132,9 @@ public class MainControllerTest {
                 assertEquals(result.get("oldname"), "Jonny B");
                 assertEquals(result.get("newname"), "Jackson Cat");
 
+		//uncomment to trigger failure and test build deployment fail
+		assertEquals(result.get("newname"), "Trigger Failure");
+
     		System.out.println("testDemoUpdate EndPoint: " + responseEntityStr);
 		System.out.println("===============================\n");
 
