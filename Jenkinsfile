@@ -34,8 +34,8 @@ node {
 
 	stage('Deploy MySQL and Spring Boot services in Docker Container') {
 		dir("${env.WORKSPACE}/complete") {
-			//if docker hasnt shut down by now, force it to stop
-			sh ("docker kill springboot || echo \"container springboot does not exist.\"")
+			//if docker hasnt shut down by now, force it to stop and remove so next container can run
+			sh ("docker rm -f springboot || echo \"container springboot does not exist.\"")
 
 			sh ("docker-compose -f docker-compose_container.yml up -d")
 			sh ("docker run --name springboot --network complete_mynetwork -p 8081:8081 --expose 8081 -e spring.datasource.url=\"jdbc:mysql://db:3306/db_example\" -d ${dockerhubaccountid}/${application}:${BUILD_NUMBER}")
