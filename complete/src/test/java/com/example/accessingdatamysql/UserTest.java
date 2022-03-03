@@ -38,15 +38,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.accessingdatamysql.AccessingDataMysqlApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Map;
 import java.util.HashMap;
 
-//@ExtendWith(SpringExtension.class)
-//@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-//@ExtendWith(SpringJUnit4ClassRunner.class)
-//@SpringBootTest(AccessingDataMysqlApplication.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext
 public class UserTest {
@@ -59,7 +54,7 @@ public class UserTest {
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	//test for generate id
+	//test for generate id from User table
 	@Test
 	public void testGenerateUserIDJPA() throws Exception {
 		User testUser = new User();
