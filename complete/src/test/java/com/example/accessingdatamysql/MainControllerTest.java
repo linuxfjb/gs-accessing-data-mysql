@@ -41,13 +41,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.json.JSONArray;
 import com.example.accessingdatamysql.AccessingDataMysqlApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-
-//@ExtendWith(SpringJUnit4ClassRunner.class)
-//@SpringBootTest(AccessingDataMysqlApplication.class)
-//@ExtendWith(SpringExtension.class)
-//@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext
 public class MainControllerTest {
